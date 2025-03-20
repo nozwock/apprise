@@ -40,6 +40,7 @@ import requests
 from json import loads
 from json import dumps
 from os.path import basename
+from urllib.parse import quote
 
 from .base import NotifyBase
 from ..common import NotifyFormat
@@ -550,6 +551,9 @@ class NotifyNtfy(NotifyBase):
         self.logger.debug('ntfy POST URL: %s (cert_verify=%r)' % (
             notify_url, self.verify_certificate,
         ))
+
+        for k, v in headers.items():
+            headers[k] = quote(v, safe="/#%[]=:;$&()+,!?*@'~")
 
         # Default response type
         response = None
